@@ -1,20 +1,16 @@
-import { store } from 'quasar/wrappers'
-import { createPinia } from 'pinia'
+// src/stores/index.js
 
-/*
- * If not building with SSR mode, you can
- * directly export the Store instantiation;
- *
- * The function below can be async too; either use
- * async/await or return a Promise which resolves
- * with the Store instance.
- */
+import { createPinia } from "pinia";
+import { createPersistedStatePlugin } from "pinia-plugin-persistedstate-2";
+import { store } from "quasar/wrappers";
+/// import resetStore from './plugins/resetStore'
 
 export default store((/* { ssrContext } */) => {
-  const pinia = createPinia()
-
+  const pinia = createPinia();
   // You can add Pinia plugins here
   // pinia.use(SomePiniaPlugin)
-
-  return pinia
-})
+  const installPersistedStatePlugin = createPersistedStatePlugin();
+  pinia.use((context) => installPersistedStatePlugin(context));
+  // pinia.use(resetStore)
+  return pinia;
+});

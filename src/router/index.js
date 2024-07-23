@@ -1,30 +1,49 @@
-import { route } from 'quasar/wrappers'
-import { createRouter, createMemoryHistory, createWebHistory, createWebHashHistory } from 'vue-router'
-import routes from './routes'
+import {
+  createMemoryHistory,
+  createRouter,
+  createWebHashHistory,
+  createWebHistory,
+} from "vue-router";
+import { nextTick } from "vue";
+import { route } from "quasar/wrappers";
+import { useAuthStore } from "../stores/auth.store";
+import routes from "./routes";
 
-/*
- * If not building with SSR mode, you can
- * directly export the Router instantiation;
- *
- * The function below can be async too; either use
- * async/await or return a Promise which resolves
- * with the Router instance.
- */
+const createHistory = process.env.SERVER
+  ? createMemoryHistory
+  : process.env.VUE_ROUTER_MODE === "history"
+  ? createWebHistory
+  : createWebHashHistory;
+
+const Router = createRouter({
+  scrollBehavior: () => ({ left: 0, top: 0 }),
+  routes,
+  history: createHistory(process.env.VUE_ROUTER_BASE),
+});
 
 export default route(function (/* { store, ssrContext } */) {
-  const createHistory = process.env.SERVER
-    ? createMemoryHistory
-    : (process.env.VUE_ROUTER_MODE === 'history' ? createWebHistory : createWebHashHistory)
+  Router.beforeEach(async (to, from) => {
+    // const authStore = useAuthStore();
 
-  const Router = createRouter({
-    scrollBehavior: () => ({ left: 0, top: 0 }),
-    routes,
+    // const haveUser = () => authStore.loggedUser?.email;
 
-    // Leave this as is and make changes in quasar.conf.js instead!
-    // quasar.conf.js -> build -> vueRouterMode
-    // quasar.conf.js -> build -> publicPath
-    history: createHistory(process.env.VUE_ROUTER_BASE)
-  })
+    // // // Login redirect
+    // const isLogin = to.name === "login";
+    // const goToLogin = { name: "login", query: { redirect: to.fullPath } };
 
-  return Router
-})
+    // // ta indo pra login passou logout na query
+    // if (isLogin && to.query.logout) return true;
+    // // se ta no login e tem usuario
+    // else if (isLogin && haveUser()) return { name: "home" };
+    // // se tem usuario
+    // else if (haveUser()) return true;
+    // // se nao tem usuario e nao ta no login
+    // else if (!haveUser() && !isLogin) return goToLogin;
+    // // no fim das contas volta pro login
+    // else return goToLogin;
+    return true;
+  });
+
+  return Router;
+});
+export { Router };
