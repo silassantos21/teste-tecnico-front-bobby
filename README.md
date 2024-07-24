@@ -1,41 +1,35 @@
-# Quasar App (quasar-project)
+# Projeto teste técnico Bobby (teste-tecnico-front-bobby)
 
-A Quasar Project
+Autor: Silas Ribeiro dos Santos
 
-## Install the dependencies
+Data de entrega: 24/07/2024
+
+## Instalar dependências
+
 ```bash
 yarn
 # or
 npm install
 ```
 
-### Start the app in development mode (hot-code reloading, error reporting, etc.)
+### Rodar o projeto localmente
+
 ```bash
 quasar dev
-```
-
-
-### Lint the files
-```bash
-yarn lint
 # or
-npm run lint
+yarn quasar dev
 ```
 
+### Oservações
 
-### Format the files
-```bash
-yarn format
-# or
-npm run format
+```
+- Senha e login de acesso estão na tela de login
+- Os dados serão guardados no state. Só serão apagados quando o usuário efetuar o logout ou fechar o navegador
+- O gráfico atualiza assim que o usuário cadastra um usuário com emprego
 ```
 
+### Build do projeto para produção
 
-
-### Build the app for production
 ```bash
 quasar build
 ```
-
-### Customize the configuration
-See [Configuring quasar.config.js](https://v2.quasar.dev/quasar-cli-vite/quasar-config-js).
