@@ -4,6 +4,13 @@ Autor: Silas Ribeiro dos Santos
 
 Data de entrega: 24/07/2024
 
+## Baixar e entrar no projeto (Pelo terminal Git)
+
+```
+git clone https://github.com/silassantos21/teste-tecnico-front-bobby.git
+cd teste-tecnico-front-bobby
+```
+
 ## Instalar dependências
 
 ```bash
