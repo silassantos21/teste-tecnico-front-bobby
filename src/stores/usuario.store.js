@@ -95,15 +95,15 @@ export const useUserStore = defineStore("usuarioStore", () => {
     });
   };
 
-  function $reset() {
-    users.value = {};
+  function clearUsuarios() {
+    users.value = [];
   }
 
   // make sure to pass the right store definition, `useAuth` in this case.
 
   return {
     users,
-    $reset,
+    clearUsuarios,
     getUsers,
     createUser,
     updateUser,

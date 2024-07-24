@@ -8,11 +8,19 @@
           text="Usuários"
         />
         <q-btn
+          v-if="!isMobile"
           outline
           rounded
           color="bobby"
           icon="add_circle"
           label="Novo cadastro"
+          @click="abrirModalUsuario('Adicionar')"
+        />
+        <q-btn
+          v-if="isMobile"
+          round
+          color="bobby"
+          icon="add"
           @click="abrirModalUsuario('Adicionar')"
         />
         <!-- @click="router.push({ name: 'home' })" -->
@@ -35,7 +43,7 @@
             debounce="300"
             v-model="filter"
             placeholder="Pesquisar por usuário"
-            class="min-w-[350px]"
+            class="min-w-[250px]"
           >
             <template v-slot:append>
               <q-icon name="search" />
@@ -56,7 +64,7 @@
       </q-table>
     </q-card>
   </div>
-  <q-dialog v-model="dialogUser">
+  <q-dialog v-model="dialogUser" :maximized="isMobile">
     <q-card class="q-px-md q-py-sm min-w-[50vw] min-h-[40vh]">
       <q-form @submit.prevent="onActionUser">
         <q-card-section>
@@ -110,7 +118,7 @@ import { useQuasar } from "quasar";
 import { useRouter } from "vue-router";
 import TextIcon from "../components/TextIcon.vue";
 import CardUsuario from "../components/CardUsuario.vue";
-import { ref, onMounted } from "vue";
+import { computed, ref, onMounted } from "vue";
 import { storeToRefs } from "pinia";
 import { useUserStore } from "../stores/usuario.store";
 import { NotifyError, NotifySucess } from "boot/Notify";
@@ -208,6 +216,9 @@ const abrirModalUsuario = (tipoModal, dadosUsuario = null) => {
   }
   dialogUser.value = true;
 };
+const isMobile = computed(() => {
+  return Boolean($q.platform.is?.mobile);
+});
 
 onMounted(async () => {
   $q.loading.show({ message: "Carregando os dados de usuários. Aguarde..." });

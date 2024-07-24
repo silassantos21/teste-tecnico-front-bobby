@@ -1,7 +1,7 @@
 <template>
   <q-layout class="grid place-items-center">
     <div
-      class="grid grid-cols-2 content-center h-screen w-screen"
+      class="grid grid-cols-2 login-desktop content-center h-screen w-screen"
       style="background-color: #bccb0f"
     >
       <div class="col-span-1 relative self-center mx-auto">
@@ -45,6 +45,45 @@
         </q-form>
       </div>
     </div>
+    <div
+      class="login-mobile content-center h-screen w-screen"
+      style="background-color: #bccb0f"
+    >
+      <div class="mx-8 w-[85vw]">
+        <q-form @submit="onSubmit" class="q-gutter-md">
+          <q-card class="my-card flex flex-col rounded-lg shadow-md">
+            <q-card-section>
+              <div class="text-h6 text-bobby">Login</div>
+              <div class="text-subtitle2 font-bold text-bobby">
+                Informe seus dados cadastrais
+              </div>
+            </q-card-section>
+            <q-card-section>
+              <q-input
+                ref="login"
+                label-color="bobby"
+                v-model="data.login"
+                :rules="[(val) => !!val || 'Campo Obrigatorio']"
+                size="md"
+                label="Login"
+              />
+              <InputPassword
+                :model-value="data.senha"
+                @update:model-value="(v) => (data.senha = v)"
+              />
+              <q-btn
+                :loading="load"
+                size="md"
+                type="submit"
+                outline
+                class="text-bobby w-full mt-40 md:mt-32"
+                >Entrar na conta
+              </q-btn>
+            </q-card-section>
+          </q-card>
+        </q-form>
+      </div>
+    </div>
   </q-layout>
 </template>
 
@@ -56,14 +95,14 @@ import { NotifyError } from "../boot/Notify";
 import { useAuthStore } from "../stores/auth.store";
 import { useRouter } from "vue-router";
 import { useUserStore } from "../stores/usuario.store";
-import axios from "axios";
-import FormLogin from "../components/FormLogin.vue";
 import InputPassword from "../components/InputPassword.vue";
 import imageBobby from "../../public/image/bobby.png";
 
 const { URLS } = api.defaults;
 
 const { getUser } = useUserStore();
+
+const { login } = useAuthStore();
 
 const form = ref(null);
 const router = useRouter();
@@ -72,8 +111,8 @@ const load = ref(false);
 const emailRecipient = ref("");
 
 const data = ref({
-  login: "",
-  senha: "",
+  login: "eve.holt@reqres.in",
+  senha: "pistol",
 });
 
 onMounted(() => {
@@ -86,9 +125,8 @@ function handleUpdateData(v) {
 
 async function onSubmit() {
   load.value = true;
-  const authStore = useAuthStore();
 
-  const logged = await authStore.login(data.value.login, data.value.senha);
+  const logged = await login(data.value.login, data.value.senha);
 
   // if (logged) {
   //   await getUser()
@@ -105,6 +143,20 @@ watch(formType, async () => {
   animationForm();
 });
 </script>
+
+<style lang="scss">
+@media (max-width: 767px) {
+  .login-desktop {
+    display: none;
+  }
+}
+
+@media (min-width: 767px) {
+  .login-mobile {
+    display: none;
+  }
+}
+</style>
 
 <style>
 .text-bobby {

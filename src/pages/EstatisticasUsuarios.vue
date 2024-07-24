@@ -9,7 +9,7 @@
         />
       </div>
       <div
-        class="m-10"
+        class="m-10 chart-mobile"
         v-if="dadosFiltro.length > 0"
         style="text-align: -webkit-center"
       >
@@ -56,6 +56,16 @@ onMounted(async () => {
   await requests();
 });
 </script>
+
+<style lang="scss">
+@media (max-width: 1260px) {
+  .chart-mobile {
+    float: right;
+    left: 6.5rem;
+    position: relative;
+  }
+}
+</style>
 
 <style lang="sass" scoped>
 

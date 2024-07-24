@@ -3,13 +3,16 @@ import { computed, nextTick, ref } from "vue";
 import { Cookies, LoadingBar } from "quasar";
 import { defineStore } from "pinia";
 import { NotifyError } from "boot/Notify";
+import { useUserStore } from "../stores/usuario.store";
 import { Router } from "../router/index";
 
 export const useAuthStore = defineStore("authStore", () => {
   const loggedUser = ref(null);
 
+  const { clearUsuarios } = useUserStore();
+
   function saveToken(token) {
-    Cookies.set("BOBBY_TOKEN", token, tokenOpt);
+    Cookies.set("BOBBY_TOKEN", token);
   }
 
   async function login(email, password) {
@@ -19,10 +22,14 @@ export const useAuthStore = defineStore("authStore", () => {
         email,
         password,
       };
-      const request = await api.post(URLS.login, payloadLogin);
-      saveToken();
+      const { data } = await api.post(URLS.login, payloadLogin);
+      saveToken(data.token);
       loggedUser.value = payloadLogin;
-      Router.replace(Router.currentRoute.value.query?.redirect || "/");
+      loggedUser.value.name = loggedUser.value.email.substr(
+        0,
+        loggedUser.value.email.indexOf("@")
+      );
+      Router.push({ name: "home" });
       return true;
     } catch (e) {
       console.log(e);
@@ -38,11 +45,11 @@ export const useAuthStore = defineStore("authStore", () => {
    */
   async function logout() {
     LoadingBar.stop();
-    user.value = {};
-    Cookies.remove("NDT_REFRESH_TOKEN");
-    Cookies.remove("NDT_TOKEN");
+    loggedUser.value = null;
+    Cookies.remove("BOBBY_TOKEN");
+    clearUsuarios();
     await nextTick();
-    Router.replace({ name: "login", query: { logout: true } });
+    Router.push({ name: "login" });
   }
 
   return {

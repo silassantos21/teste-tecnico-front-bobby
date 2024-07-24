@@ -11,23 +11,27 @@
           @click="toggleLeftDrawer"
         />
 
-        <q-toolbar-title> Olá, bananinha! </q-toolbar-title>
+        <q-toolbar-title v-if="loggedUser">
+          Olá, {{ loggedUser.name || "Saindo..." }}
+        </q-toolbar-title>
 
-        <div>
+        <div v-if="loggedUser">
           <q-btn-dropdown split class="bg-bobby" push no-caps icon="person">
             <div class="row justify-center no-wrap q-pa-md">
               <div class="items-center">
                 <q-avatar size="72px">
-                  <img src="https://cdn.quasar.dev/img/boy-avatar.png" />
+                  <img :src="bobbyzinho" />
                 </q-avatar>
-                <div class="text-subtitle1 q-mt-md q-mb-xs">John Doe</div>
+                <div class="text-subtitle1 q-mt-md q-mb-xs">
+                  {{ loggedUser.name }}
+                </div>
                 <q-btn
                   class="text-bobby"
                   outline
                   label="Logout"
                   push
                   size="sm"
-                  v-close-popup
+                  @click="logout"
                 />
               </div>
             </div>
@@ -66,7 +70,19 @@
 
 <script setup>
 import { ref } from "vue";
+import bobbyzinho from "/image/bobbyzinho.jpeg";
 import EssentialLink from "components/EssentialLink.vue";
+import { useRouter } from "vue-router";
+
+import { useAuthStore } from "../stores/auth.store";
+
+import { storeToRefs } from "pinia";
+
+const { logout } = useAuthStore();
+
+const { loggedUser } = storeToRefs(useAuthStore());
+
+const router = useRouter();
 
 defineOptions({
   name: "MainLayout",
