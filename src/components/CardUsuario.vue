@@ -2,7 +2,7 @@
   <q-card bordered flat class="q-pa-md text-center">
     <q-card-section>
       <q-avatar size="72px">
-        <img :src="propsRow.row.avatar" />
+        <img :src="propsRow.row.avatar || bobbyzinho" />
       </q-avatar>
       <p class="mt-4 text-lg">
         {{ `${propsRow.row.first_name} ${propsRow.row.last_name}` }}
@@ -26,6 +26,7 @@
 </template>
 
 <script setup>
+import bobbyzinho from "/image/bobbyzinho.jpeg";
 const props = defineProps({
   propsRow: {
     type: Object,

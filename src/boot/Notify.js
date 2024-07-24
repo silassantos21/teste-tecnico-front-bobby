@@ -1,46 +1,46 @@
-import { boot } from 'quasar/wrappers'
-import { Notify } from 'quasar'
+import { boot } from "quasar/wrappers";
+import { Notify } from "quasar";
 
 // "async" is optional;
 // more info on params: https://v2.quasar.dev/quasar-cli/boot-files
 
-Notify.registerType('error', {
-  icon: 'warning',
+Notify.registerType("error", {
+  icon: "warning",
   progress: true,
-  classes: 'notify-error',
+  classes: "orange",
   timeout: 2500,
-  position: 'top-left',
-})
+  position: "top",
+});
 
-Notify.registerType('sucess', {
-  icon: 'check_circle',
+Notify.registerType("sucess", {
+  icon: "check_circle",
   progress: true,
-  classes: 'notify-sucess',
+  color: "green",
   timeout: 2500,
-  position: 'top-left',
-})
+  position: "top",
+});
 
-Notify.registerType('alert', {
-  icon: 'warning',
+Notify.registerType("alert", {
+  icon: "warning",
   progress: true,
-  classes: 'notify-alert',
+  classes: "red",
   timeout: 2500,
-  position: 'top-left',
-})
+  position: "top",
+});
 
 const NotifyError = (text, opts) =>
-  Notify.create({ type: 'error', message: text, ...opts })
+  Notify.create({ type: "error", message: text, ...opts });
 
 const NotifySucess = (text, opts) =>
-  Notify.create({ type: 'sucess', message: text, ...opts })
+  Notify.create({ type: "sucess", message: text, ...opts });
 
 const NotifyAlert = (text, opts) =>
-  Notify.create({ type: 'alert', message: text, ...opts })
+  Notify.create({ type: "alert", message: text, ...opts });
 
 export default boot(({ app }) => {
-  app.config.globalProperties.$NotifyError = NotifyError
-  app.config.globalProperties.$NotifySucess = NotifySucess
-  app.config.globalProperties.$NotifyAlert = NotifyAlert
-})
+  app.config.globalProperties.$NotifyError = NotifyError;
+  app.config.globalProperties.$NotifySucess = NotifySucess;
+  app.config.globalProperties.$NotifyAlert = NotifyAlert;
+});
 
-export { NotifyError, NotifySucess, NotifyAlert }
+export { NotifyError, NotifySucess, NotifyAlert };

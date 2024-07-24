@@ -52,7 +52,7 @@ const requests = async () => {
 };
 
 onMounted(async () => {
-  await getUsers();
+  if (users.value.length === 0) await getUsers();
   await requests();
 });
 </script>

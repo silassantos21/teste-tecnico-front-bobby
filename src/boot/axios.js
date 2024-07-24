@@ -18,6 +18,7 @@ const api = axios.create({
    */
   URLS: {
     users: `${API_URL}users/?per_page=100`,
+    user: `${API_URL}users/`,
     unknown: `${API_URL}unknown/`,
     register: `${API_URL}register`,
     login: `${API_URL}login`,

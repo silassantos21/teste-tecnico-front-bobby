@@ -13,8 +13,59 @@ export const useUserStore = defineStore("usuarioStore", () => {
     isLoading.value = true;
     try {
       const { data } = await api.get(URLS.users);
-
       setUsers(data);
+      return data;
+    } catch (e) {
+      return Promise.reject(e);
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  async function createUser(userPayload) {
+    isLoading.value = true;
+    try {
+      const { data } = await api.post(URLS.users, userPayload);
+
+      let last_name = "";
+
+      data.name.split(" ").forEach((v, index) => {
+        if (index === 0) {
+          data.first_name = v;
+        } else {
+          last_name += last_name ? ` ${v}` : v;
+        }
+      });
+
+      data.last_name = last_name;
+
+      setNewUser(data);
+      return data;
+    } catch (e) {
+      return Promise.reject(e);
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  async function updateUser(userPayload) {
+    isLoading.value = true;
+    try {
+      const { data } = await api.patch(URLS.user + userPayload.id, userPayload);
+
+      let last_name = "";
+
+      data.name.split(" ").forEach((v, index) => {
+        if (index === 0) {
+          data.first_name = v;
+        } else {
+          last_name += last_name ? ` ${v}` : v;
+        }
+      });
+
+      data.last_name = last_name;
+
+      updateActualUser(data);
       return data;
     } catch (e) {
       return Promise.reject(e);
@@ -32,6 +83,18 @@ export const useUserStore = defineStore("usuarioStore", () => {
     });
   };
 
+  const setNewUser = (value) => {
+    users.value.unshift(value);
+  };
+
+  const updateActualUser = (value) => {
+    users.value.forEach((v, index) => {
+      if (v.id === value.id) {
+        users.value[index] = value;
+      }
+    });
+  };
+
   function $reset() {
     users.value = {};
   }
@@ -42,6 +105,8 @@ export const useUserStore = defineStore("usuarioStore", () => {
     users,
     $reset,
     getUsers,
+    createUser,
+    updateUser,
     isLoading,
   };
 });
